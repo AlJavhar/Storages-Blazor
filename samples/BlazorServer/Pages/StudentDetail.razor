@@ -1,8 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
-@page "/students/studentDetail/{studentId:int}/{count:int}"
+@* @page "/students/studentDetail/{studentId:int}/{count:int}" *@
+@page "/students/studentDetail" 
 @page "/ratin"
 @inject IJSRuntime JS
 @* @inject Blazored.SessionStorage.ISessionStorageService session *@
+@inject NavigationManager NM
 @inject ProtectedSessionStorage session
 
 <h3>Student Detail page</h3>
@@ -13,6 +15,9 @@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
+
+My Url : @Url
+
 @* @if(Count > 0)
 {
     <NavigationLock OnBeforeInternalNavigation="RellyLeave" ConfirmExternalNavigation />
@@ -20,11 +25,15 @@
 
 @code {
     [Parameter]
+    [SupplyParameterFromQuery(Name = "StudentId")]
     public int StudentId { get; set; }
 
     [Parameter]
+    [SupplyParameterFromQuery(Name = "Count")]
     public int Count {get; set;}
 
+
+    private string? Url;
     // private void IncrementCount()
     // {
     //     Count++;
@@ -32,18 +41,30 @@
     //     session.SetItemAsync("SessionUser", Count);
     // }
 
-
-
-
     async Task IncrementCount()
     {
         Count++;
 
         // await session.SetItemAsync("SessionUser", Count); 
         await session.SetAsync("SessionUser", Count);
+        await session.SetAsync("SessionStudent", StudentId);
         // Замените "newUri" на желаемый путь, который вы хотите установить
-        await JS.InvokeVoidAsync("replaceUrl", $"/students/studentDetail/{StudentId}/{Count}");
+        await JS.InvokeVoidAsync("replaceUrl", $"/students/studentDetail?StudentId={StudentId}&Count={Count}");
+
+        Dictionary<string, Object?> keyValues = new()
+            {
+                ["studentId"] = StudentId,
+                ["count"] = Count
+            };
+
+        await session.SetAsync("MyUrl", NM.GetUriWithQueryParameters(keyValues));
+
+        var Url = (await session.GetAsync<string>("MyUrl")).Value;
     }
+
+     
+   
+    // ("MyUrl", NM.GetUriWithQueryParameters(keyValues));
 
     // async Task RellyLeave(LocationChangingContext context)
     // {

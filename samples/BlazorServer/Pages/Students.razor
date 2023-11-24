@@ -13,7 +13,24 @@
     async void Goto()
     {
         var Count = await session.GetAsync<int>("SessionUser");
+        var studentId = await session.GetAsync<int>("SessionStudent");
+        // nm.NavigateTo($"/students/studentDetail/10/{(Count.Success ? Count.Value : 0)}");
+      
+        
+        nm.NavigateTo($"/students/studentDetail?StudentId=10&Count={(Count.Success ? Count.Value : 0)}");
+        // Dictionary<string, Object?> keyValues = new()
+        //     {
+        //         ["studentId"] = 10,
+        //         ["count"] = Count.Value
+        //     };
 
-        nm.NavigateTo($"/students/studentDetail/10/{(Count.Success ? Count.Value : 0)}");
+       
+
+        // nm.NavigateTo(nm.ToAbsoluteUri)
+
+        // nm.NavigateTo($"/students/studentDetail/10/{(Count.Success ? Count.Value : 0)}", new NavigationOptions
+        // {
+        //     HistoryEntryState = "Navigation state"
+        // });  надо понят что это выполняет.
     }
 }
