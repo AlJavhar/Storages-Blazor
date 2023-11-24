@@ -1,7 +1,9 @@
-﻿@page "/students/studentDetail/{studentId:int}/{count:int}"
+﻿@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@page "/students/studentDetail/{studentId:int}/{count:int}"
 @page "/ratin"
 @inject IJSRuntime JS
-@inject Blazored.SessionStorage.ISessionStorageService session
+@* @inject Blazored.SessionStorage.ISessionStorageService session *@
+@inject ProtectedSessionStorage session
 
 <h3>Student Detail page</h3>
 
@@ -31,13 +33,14 @@
     // }
 
 
-    
+
 
     async Task IncrementCount()
     {
         Count++;
 
-        await session.SetItemAsync("SessionUser", Count);
+        // await session.SetItemAsync("SessionUser", Count); 
+        await session.SetAsync("SessionUser", Count);
         // Замените "newUri" на желаемый путь, который вы хотите установить
         await JS.InvokeVoidAsync("replaceUrl", $"/students/studentDetail/{StudentId}/{Count}");
     }

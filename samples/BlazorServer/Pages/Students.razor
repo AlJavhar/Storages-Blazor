@@ -1,6 +1,8 @@
 ﻿@page "/students"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @inject NavigationManager nm
-@inject Blazored.SessionStorage.ISessionStorageService session
+@* @inject Blazored.SessionStorage.ISessionStorageService session *@
+@inject ProtectedSessionStorage session;
 
 <h3>Student Modul</h3>
 
@@ -8,12 +10,10 @@
 <button class="btn btn-primary" @onclick="Goto">ABS</button>
 
 @code {
-    private int Count;
-
     async void Goto()
     {
-        Count = await session.GetItemAsync<int>("SessionUser");
+        var Count = await session.GetAsync<int>("SessionUser");
 
-        nm.NavigateTo($"/students/studentDetail/10/{Count}");
+        nm.NavigateTo($"/students/studentDetail/10/{(Count.Success ? Count.Value : 0)}");
     }
 }
