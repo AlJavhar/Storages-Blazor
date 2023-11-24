@@ -1,5 +1,6 @@
 ﻿@page "/students"
 @inject NavigationManager nm
+@inject Blazored.SessionStorage.ISessionStorageService session
 
 <h3>Student Modul</h3>
 
@@ -7,8 +8,12 @@
 <button class="btn btn-primary" @onclick="Goto">ABS</button>
 
 @code {
-    void Goto()
+    private int Count;
+
+    async void Goto()
     {
-        nm.NavigateTo("/students/studentDetail/10/0");
+        Count = await session.GetItemAsync<int>("SessionUser");
+
+        nm.NavigateTo($"/students/studentDetail/10/{Count}");
     }
 }

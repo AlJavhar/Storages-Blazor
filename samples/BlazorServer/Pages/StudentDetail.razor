@@ -31,15 +31,13 @@
     // }
 
 
-    public async Task GetSessionUser()
-    {
-        Count = await session.GetItemAsync<int>("SessionUser");
-    }
+    
 
     async Task IncrementCount()
     {
         Count++;
 
+        await session.SetItemAsync("SessionUser", Count);
         // Замените "newUri" на желаемый путь, который вы хотите установить
         await JS.InvokeVoidAsync("replaceUrl", $"/students/studentDetail/{StudentId}/{Count}");
     }
