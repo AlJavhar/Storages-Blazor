@@ -1,0 +1,34 @@
+﻿@page "/user"
+@inject Blazored.SessionStorage.ISessionStorageService session
+@using BlazorServer.Data
+
+<h3>User info</h3>
+
+
+<button class="btn btn-success" @onclick="GetSessionUser">Get session</button>
+
+<button class="btn btn-danger" @onclick="ClearSession">Clear session</button>
+
+@if (user != null)
+{
+    <p>User id:</p>
+    <p>@user.Id</p>
+    <p>User name:</p>
+    <p>@user.USerName</p>
+    <p>User password:</p>
+    <p>@user.Password</p>
+}
+@code {
+    public UserInfo user;
+
+    public async Task GetSessionUser()
+    {
+        user = await session.GetItemAsync<UserInfo>("SessionUser");
+    }
+
+    public void ClearSession()
+    {
+        session.ClearAsync();
+        user = new UserInfo();
+    }
+}

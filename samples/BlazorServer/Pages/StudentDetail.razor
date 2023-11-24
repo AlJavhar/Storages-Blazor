@@ -1,0 +1,56 @@
+﻿@page "/students/studentDetail/{studentId:int}/{count:int}"
+@page "/ratin"
+@inject IJSRuntime JS
+@inject Blazored.SessionStorage.ISessionStorageService session
+
+<h3>Student Detail page</h3>
+
+<p>Selected Student Id : @StudentId</p>
+
+<p role="status">Count : @Count</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@* @if(Count > 0)
+{
+    <NavigationLock OnBeforeInternalNavigation="RellyLeave" ConfirmExternalNavigation />
+} *@
+
+@code {
+    [Parameter]
+    public int StudentId { get; set; }
+
+    [Parameter]
+    public int Count {get; set;}
+
+    // private void IncrementCount()
+    // {
+    //     Count++;
+
+    //     session.SetItemAsync("SessionUser", Count);
+    // }
+
+
+    public async Task GetSessionUser()
+    {
+        Count = await session.GetItemAsync<int>("SessionUser");
+    }
+
+    async Task IncrementCount()
+    {
+        Count++;
+
+        // Замените "newUri" на желаемый путь, который вы хотите установить
+        await JS.InvokeVoidAsync("replaceUrl", $"/students/studentDetail/{StudentId}/{Count}");
+    }
+
+    // async Task RellyLeave(LocationChangingContext context)
+    // {
+    //     var confirmed = await JS.InvokeAsync<bool>("window.confirm", "Are you sure you wanna leave, dude?");
+
+    //     if(!confirmed)
+    //     {
+    //         context.PreventNavigation();
+    //     }
+    // }
+}

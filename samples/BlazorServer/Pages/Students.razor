@@ -1,0 +1,14 @@
+﻿@page "/students"
+@inject NavigationManager nm
+
+<h3>Student Modul</h3>
+
+@* <a href="/students/studentDetail/10">ABC</a> *@
+<button class="btn btn-primary" @onclick="Goto">ABS</button>
+
+@code {
+    void Goto()
+    {
+        nm.NavigateTo("/students/studentDetail/10/0");
+    }
+}

@@ -1,0 +1,26 @@
+﻿@page "/testing"
+@inject Blazored.SessionStorage.ISessionStorageService session
+@using BlazorServer.Data
+
+<h3>Blazor Session!</h3>
+
+
+<button class="btn btn-success" @onclick="SetSessionUser">Set Session</button>
+
+<label>@message</label>
+@code {
+
+    string message;
+
+    public void SetSessionUser()
+    {
+        var user = new UserInfo();
+        user.Id = 1;
+        user.USerName = "Admin";
+        user.Password = "123";
+
+        session.SetItemAsync("SessionUser", user);
+
+        message = "Session Set Successfully";
+    }
+}
